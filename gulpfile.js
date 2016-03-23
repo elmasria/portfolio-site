@@ -18,30 +18,13 @@ gulp.task('dist', [
 	'copy-html',
 	'copy-images',
 	'styles',
-	'scripts-dist',
 	'server'
 ]);
 
 gulp.task('copy-html', function(){
 	gulp.src('./index.html')
 	.pipe(gulp.dest('./dist'))
-	.pipe(reload({stream: true}));
-
-	gulp.src('./templates')
-	.pipe(gulp.dest('./dist'))
-	.pipe(reload({stream: true}));
-
-	gulp.src('./templates/**/*')
-	.pipe(gulp.dest('./dist/templates'))
-	.pipe(reload({stream: true}));
-
-	gulp.src('./vendors')
-	.pipe(gulp.dest('./dist'))
-	.pipe(reload({stream: true}));
-
-	gulp.src('./vendors/**/*')
-	.pipe(gulp.dest('./dist/vendors'))
-	.pipe(reload({stream: true}));
+	.pipe(reload({stream: true}));	
 });
 
 gulp.task('copy-images', function(){
@@ -50,7 +33,7 @@ gulp.task('copy-images', function(){
 });
 
 gulp.task('styles', function () {
-	gulp.src('styles/sass/**/*.scss')
+	gulp.src('styles/**/*.scss')
 	.pipe(sass({
 		outputStyle: 'compressed'
 	}).on('error', sass.logError))
@@ -60,31 +43,21 @@ gulp.task('styles', function () {
 	.pipe(minifyCSS())
 	.pipe(gulp.dest('dist/styles'))
 	.pipe(reload({stream: true}));
-});
 
-gulp.task('scripts-dist', function(){
-	gulp.src(['vendors/angular/angular.js',
-		'vendors/angular/angular-route.min.js',
-		'vendors/angular/angular-resource.min.js',
-		'vendors/angular/angular-animate.min.js',
-		'javascript/appConfiguration.json',
-		'javascript/app-data/icons.json',
-		'javascript/**/*.js'])
-	.pipe(sourcemap.init())
-	.pipe(concat('app.js'))
-	.pipe(gulp.dest('dist/javascript'))
-	.pipe(reload({stream: true}));
+	gulp.src('styles/**/*.css')
+	.pipe(gulp.dest('dist/styles'));
 });
 
 gulp.task('server', function(){
 	browserSync.init({
 		server: {
-			baseDir: './dist/'
+			baseDir: './dist/'				
+		},
+		port: 8080,
+		ui: {
+    		port: 8000
 		}
 	});
-
-	gulp.watch('./Styles/sass/**/*.scss',['styles']);
-	gulp.watch('./javascript/**/*.js', ['scripts-dist']);
+	gulp.watch('./Styles/**/*.scss',['styles']);
 	gulp.watch('./index.html', ['copy-html']);
-	gulp.watch('./templates/**/*.html', ['copy-html']);
 });
