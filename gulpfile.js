@@ -15,8 +15,8 @@ gulp.task('default', ['dist'], function(){
 });
 
 gulp.task('dist', [
-	//'copy-html',
-	'copy-images',
+	'copy-html',
+	//'copy-images',
 	'styles',
 	'server'
 ]);
